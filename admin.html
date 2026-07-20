@@ -1,0 +1,78 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin · REDCUT</title><link rel="stylesheet" href="assets/app.css">
+<style>
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:22px 0 30px}
+  @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .kpi{border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--panel)}
+  .kpi b{display:block;font-size:26px;letter-spacing:-.02em}
+  .kpi span{font-size:11px;color:var(--mut);letter-spacing:.12em;text-transform:uppercase}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}
+  th{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  .flag{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}
+  .sw{width:38px;height:21px;border-radius:99px;background:#25252d;border:1px solid var(--line);position:relative;cursor:pointer}
+  .sw i{position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#54545f;transition:.15s}
+  .sw.on{background:var(--red-dim);border-color:var(--red)}
+  .sw.on i{left:19px;background:var(--red)}
+  .warn{border:1px solid #4a3f14;border-left:2px solid var(--warn);border-radius:var(--r);padding:14px 16px;margin-bottom:22px;background:#16150f}
+</style></head><body>
+
+<section style="border-top:none"><div class="wrap">
+  <p class="eyebrow">Admin</p>
+  <h2>Operations panel</h2>
+  <div class="warn" style="margin-top:16px">This view reads only what is on this device. A real admin panel sits behind server side authentication and role checks. Never ship a client side admin route.</div>
+
+  <div class="kpis">
+    <div class="kpi"><span>Accounts</span><b id="kUsers">0</b></div>
+    <div class="kpi"><span>Projects</span><b id="kProj">0</b></div>
+    <div class="kpi"><span>Exports</span><b id="kExp">0</b></div>
+    <div class="kpi"><span>Media cached</span><b id="kMedia">0</b></div>
+    <div class="kpi"><span>Storage used</span><b id="kBytes">0</b></div>
+  </div>
+
+  <h3>Accounts</h3>
+  <table><thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Projects</th><th>Joined</th></tr></thead><tbody id="tUsers"></tbody></table>
+
+  <h3 style="margin-top:34px">Recent projects</h3>
+  <table><thead><tr><th>Project</th><th>Owner</th><th>Clips</th><th>Duration</th><th>Updated</th></tr></thead><tbody id="tProj"></tbody></table>
+
+  <h3 style="margin-top:34px">Feature flags</h3>
+  <div id="flags"></div>
+
+  <h3 style="margin-top:34px">Support tickets</h3>
+  <p class="mut">Tickets arrive from the contact form once you connect an endpoint. Nothing is queued locally.</p>
+</div></section>
+
+<script src="assets/store.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+(async()=>{
+  const users=RC.Auth.users();
+  const projects=await RC.idb.all("projects");
+  const media=await RC.idb.all("media");
+  const exports_=await RC.idb.all("exports");
+  $("#kUsers").textContent=users.length; $("#kProj").textContent=projects.length;
+  $("#kExp").textContent=exports_.length; $("#kMedia").textContent=media.length;
+  $("#kBytes").textContent=RC.fmtBytes(media.reduce((n,m)=>n+(m.size||0),0));
+  $("#tUsers").innerHTML=users.length?users.map(u=>`<tr><td>${u.name}</td><td class="mut">${u.email}</td>
+    <td><span class="tag ${u.plan!=="free"?"red":""}">${u.plan}</span></td>
+    <td>${projects.filter(p=>p.userId===u.id).length}</td><td class="mut">${RC.fmtDate(u.created)}</td></tr>`).join("")
+    : `<tr><td colspan="5" class="mut">No accounts on this device.</td></tr>`;
+  $("#tProj").innerHTML=projects.length?projects.sort((a,b)=>b.updated-a.updated).slice(0,12).map(p=>{
+    const u=users.find(x=>x.id===p.userId);
+    return `<tr><td>${p.name}${p.trashed?' <span class="tag">trashed</span>':""}</td><td class="mut">${u?u.email:"unknown"}</td>
+      <td>${(p.doc.clips||[]).length}</td><td class="mono">${RC.fmtClock(p.duration)}</td><td class="mut">${RC.fmtDate(p.updated)}</td></tr>`;
+  }).join("") : `<tr><td colspan="5" class="mut">No projects yet.</td></tr>`;
+
+  const FLAGS=[["ai","AI panel",false],["teams","Team workspaces",false],["stock","Stock library",false],
+    ["webcodecs","WebCodecs export",false],["proxy","Proxy editing",false],["billing","Billing and checkout",false]];
+  $("#flags").innerHTML=FLAGS.map(f=>`<div class="flag"><div><b>${f[1]}</b>
+    <div class="hint">flag: ${f[0]}</div></div>
+    <div class="sw ${RC.LS.get("redcut:flag:"+f[0],f[2])?"on":""}" data-f="${f[0]}"><i></i></div></div>`).join("");
+  $("#flags").onclick=e=>{ const s=e.target.closest("[data-f]"); if(!s)return;
+    const k="redcut:flag:"+s.dataset.f, v=!RC.LS.get(k,false);
+    RC.LS.set(k,v); s.classList.toggle("on",v); RC.toast(s.dataset.f+" "+(v?"enabled":"disabled")); };
+})();
+RC.mountNav(""); RC.mountFooter();
+</script></body></html>

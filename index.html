@@ -1,0 +1,174 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>REDCUT · Video editing that runs in your browser</title>
+<meta name="description" content="Cut, trim, mix and export 4K video in the browser. No install, no upload, no watermark. Your footage stays on your machine.">
+<meta property="og:title" content="REDCUT · Browser video editor"><meta property="og:description" content="Edit and export 4K video in your browser. Nothing uploads.">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  .hero{position:relative;padding:92px 0 74px;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:-40% 0 auto -10%;height:520px;
+    background:radial-gradient(60% 60% at 30% 40%,rgba(255,34,51,.16),transparent 70%);pointer-events:none}
+  .hero .wrap{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+  @media(max-width:940px){.hero .wrap{grid-template-columns:1fr}}
+  .hero h1 span{color:var(--red)}
+  .lede{font-size:17px;color:var(--mut);max-width:520px;margin:20px 0 10px}
+  .facts{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 28px}
+  .fact{border:1px solid var(--line);border-radius:99px;padding:6px 14px;font-size:12px}
+  .fact b{color:var(--red)}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}
+  /* fake timeline visual */
+  .viz{border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,#111116,#0b0b0e);overflow:hidden;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .viz .bar{height:34px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:0 12px;background:#131318}
+  .viz .bar i{width:9px;height:9px;border-radius:50%;background:#2a2a33;display:inline-block}
+  .viz .bar i:first-child{background:var(--red)}
+  .viz .screen{aspect-ratio:16/9;background:#000;display:grid;place-items:center;position:relative}
+  .viz .screen::after{content:"";position:absolute;inset:0;background:
+     linear-gradient(115deg,rgba(255,34,51,.22),transparent 42%),
+     repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 2px,transparent 2px 6px)}
+  .viz .screen b{font-size:38px;letter-spacing:.3em;color:#fff;opacity:.9;z-index:2;text-transform:uppercase}
+  .viz .tl{padding:12px;display:grid;gap:6px;background:#0c0c10}
+  .viz .row{display:flex;gap:5px;height:26px}
+  .viz .cl{border-radius:3px;border:1px solid #33333d;background:linear-gradient(180deg,#26262f,#1a1a21)}
+  .viz .cl.a{background:linear-gradient(180deg,#16323a,#0f2229);border-color:#1f4450}
+  .viz .cl.r{background:linear-gradient(180deg,#3a1620,#241016);border-color:var(--red-dim)}
+  .viz .ph{width:2px;background:var(--red);box-shadow:0 0 10px var(--glow);animation:sweep 6s linear infinite;position:relative}
+  @keyframes sweep{0%{margin-left:0}100%{margin-left:calc(100% - 2px)}}
+  .viz .phrow{height:4px;padding:0 12px 12px}
+  .cmp{width:100%;border-collapse:collapse}
+  .cmp th,.cmp td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;font-size:13.5px}
+  .cmp th{color:var(--mut);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .cmp td:first-child{color:var(--mut)}
+  .cmp .y{color:var(--ok)}.cmp .n{color:var(--red)}
+  .cmp tbody tr:hover{background:#0f0f13}
+  .q{font-size:15px;line-height:1.65}
+  .who{display:flex;gap:10px;align-items:center;margin-top:16px}
+  .av{width:32px;height:32px;border-radius:50%;background:#1d1d24;border:1px solid var(--line);display:grid;place-items:center;color:var(--red);font-weight:700;font-size:13px}
+  details{border-bottom:1px solid var(--line);padding:16px 0}
+  details summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";color:var(--red);font-size:18px;line-height:1}
+  details[open] summary::after{content:"–"}
+  details p{color:var(--mut);margin-top:10px;max-width:760px}
+  .steps{counter-reset:s}
+  .step{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+  .step b{color:var(--red);font-family:ui-monospace,monospace;font-size:12px;padding-top:3px}
+</style></head><body>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Browser video editor</p>
+      <h1>Cut it here.<br><span>Nothing uploads.</span></h1>
+      <p class="lede">REDCUT is a full timeline editor that runs inside your browser tab. Import footage, trim, layer audio, and export up to 4K. Your files stay on your own drive the whole time.</p>
+      <div class="facts">
+        <span class="fact"><b>0</b> installs</span>
+        <span class="fact"><b>0</b> watermarks</span>
+        <span class="fact"><b>4K</b> export</span>
+        <span class="fact"><b>60+</b> shortcuts</span>
+      </div>
+      <div class="cta">
+        <a class="btn primary lg" href="editor.html">Start editing</a>
+        <a class="btn lg ghost" href="#how">See how it works</a>
+      </div>
+      <p class="hint">No account needed to try the editor. Sign up when you want your projects saved.</p>
+    </div>
+    <div class="viz" aria-hidden="true">
+      <div class="bar"><i></i><i></i><i></i><span class="mono" style="font-size:11px;color:var(--mut);margin-left:8px">reel_final_v4.redcut</span></div>
+      <div class="screen"><b>Redcut</b></div>
+      <div class="phrow"><div class="ph" style="height:100%"></div></div>
+      <div class="tl">
+        <div class="row"><div class="cl" style="flex:2"></div><div class="cl r" style="flex:1"></div><div class="cl" style="flex:1.4"></div></div>
+        <div class="row"><div class="cl" style="flex:1"></div><div class="cl" style="flex:3"></div></div>
+        <div class="row"><div class="cl a" style="flex:4"></div><div class="cl a" style="flex:1"></div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <p class="eyebrow">What you get</p>
+    <h2>A real timeline, not a template filler</h2>
+    <div class="grid g3" style="margin-top:32px">
+      <div class="card"><h3>Multitrack timeline</h3><p class="mut" style="margin-top:8px">Two video tracks, two audio tracks, drag to move, drag the edges to trim, snapping to clips, playhead and markers.</p></div>
+      <div class="card"><h3>Frame accurate trimming</h3><p class="mut" style="margin-top:8px">Split at the playhead, ripple delete, set in and out points, step one frame at a time with the arrow keys.</p></div>
+      <div class="card"><h3>Audio that behaves</h3><p class="mut" style="margin-top:8px">Per clip volume, fades, mute and solo per track, and a built in sound effect and tone generator for quick beds.</p></div>
+      <div class="card"><h3>Export to 4K</h3><p class="mut" style="margin-top:8px">1080p, 4K, and vertical reel sizes at 24, 30 or 60 fps, up to 40 Mbps. MP4 where your browser supports it.</p></div>
+      <div class="card"><h3>Sessions that survive</h3><p class="mut" style="margin-top:8px">Autosave every few seconds, on tab close and on browser crash. Your media is cached locally so projects reopen intact.</p></div>
+      <div class="card"><h3>Shortcuts you know</h3><p class="mut" style="margin-top:8px">Premiere and CapCut keymaps side by side. J K L, I and O, Ctrl+K, Ctrl+B, ripple delete, all of it.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h2>Four steps to a finished cut</h2>
+    <div class="steps" style="margin-top:26px">
+      <div class="step"><b>01</b><div><h3>Drop your footage in</h3><p class="mut">Drag files anywhere in the editor. Video, audio, stills. They are read straight off your disk and cached in the browser, never sent anywhere.</p></div></div>
+      <div class="step"><b>02</b><div><h3>Build the sequence</h3><p class="mut">Lay clips across four tracks, trim the ends, split at the playhead, and slide things into place with snapping on.</p></div></div>
+      <div class="step"><b>03</b><div><h3>Mix and polish</h3><p class="mut">Set clip volume, add fades, drop in music and effects, add titles and colour cards, then scrub the whole thing back at speed.</p></div></div>
+      <div class="step"><b>04</b><div><h3>Export and ship</h3><p class="mut">Pick a resolution and bitrate, hit export, and the file lands in your downloads. No queue, no credits, no watermark.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="compare">
+  <div class="wrap">
+    <p class="eyebrow">Comparison</p>
+    <h2>How REDCUT differs</h2>
+    <p class="mut" style="margin-top:10px;max-width:640px">Honest version: the big editors have more features. What REDCUT trades away in feature count, it gives back in privacy, speed to first cut, and not asking you for anything before you start.</p>
+    <table class="cmp" style="margin-top:26px">
+      <thead><tr><th></th><th>REDCUT</th><th>Cloud editors</th><th>Desktop suites</th></tr></thead>
+      <tbody>
+        <tr><td>Footage leaves your device</td><td class="y">Never</td><td class="n">Uploaded</td><td class="y">Never</td></tr>
+        <tr><td>Install required</td><td class="y">None</td><td class="y">None</td><td class="n">Large install</td></tr>
+        <tr><td>Watermark on free tier</td><td class="y">None</td><td class="n">Usually</td><td class="n">Trial limits</td></tr>
+        <tr><td>Time to first cut</td><td class="y">Seconds</td><td>Minutes, after upload</td><td>Minutes, after launch</td></tr>
+        <tr><td>Works offline</td><td class="y">Yes</td><td class="n">No</td><td class="y">Yes</td></tr>
+        <tr><td>Effects and plugin depth</td><td class="n">Limited</td><td>Broad</td><td class="y">Deepest</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="voices">
+  <div class="wrap">
+    <p class="eyebrow">Who it is for</p>
+    <h2>Built for people who cut fast</h2>
+    <div class="grid g3" style="margin-top:30px">
+      <div class="card"><p class="q">Most of my work is trimming interview footage into thirty second cuts. Opening a browser tab beats waiting for a suite to load.</p><div class="who"><div class="av">S</div><div><b>Social editor</b><br><span class="mut" style="font-size:12px">agency side</span></div></div></div>
+      <div class="card"><p class="q">Client footage is under NDA. Anything that does not upload the source is worth a look on that basis alone.</p><div class="who"><div class="av">M</div><div><b>Corporate video</b><br><span class="mut" style="font-size:12px">in house team</span></div></div></div>
+      <div class="card"><p class="q">I teach editing on lab machines where nothing can be installed. A browser timeline with the real shortcuts solves that.</p><div class="who"><div class="av">R</div><div><b>Instructor</b><br><span class="mut" style="font-size:12px">media programme</span></div></div></div>
+    </div>
+    <p class="hint" style="margin-top:14px">Illustrative use cases, not customer quotes.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap" style="max-width:900px">
+    <p class="eyebrow">FAQ</p>
+    <h2>Questions worth answering</h2>
+    <div style="margin-top:24px">
+      <details open><summary>Does my video get uploaded anywhere?</summary><p>No. Files are read locally and cached in your browser's own storage. Exporting writes a file to your downloads folder. Nothing is sent to a server.</p></details>
+      <details><summary>What formats can I import?</summary><p>Whatever your browser can decode, which usually means MP4 and MOV with H.264, WebM, MP3, WAV, M4A, PNG, JPG and WebP. Chrome and Edge decode the widest range.</p></details>
+      <details><summary>Why does exporting take as long as the video?</summary><p>Export records the live timeline through the browser's media recorder, so a two minute sequence takes two minutes. Faster than real time rendering needs WebCodecs, which is on the roadmap.</p></details>
+      <details><summary>Will I lose my work if I close the tab?</summary><p>The editor saves continuously, on a timer and again when the tab closes. Reopen the project from your dashboard and it comes back with media attached.</p></details>
+      <details><summary>Is there a watermark?</summary><p>No, on any tier.</p></details>
+      <details><summary>Does it work on a phone?</summary><p>The site and dashboard do. The editor needs a keyboard and pointer, so it asks you to switch to a desktop.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="about" style="border-bottom:1px solid var(--line)">
+  <div class="wrap center" style="max-width:720px">
+    <h2>Open a tab. Start cutting.</h2>
+    <p class="mut" style="margin:14px 0 24px">No card, no download, no upload. If you like it, make an account and your projects follow you on this machine.</p>
+    <a class="btn primary lg" href="editor.html">Open the editor</a>
+    <a class="btn lg ghost" href="pricing.html">See pricing</a>
+  </div>
+</section>
+
+<script src="assets/store.js"></script>
+<script>RC.mountNav("index.html"); RC.mountFooter();</script>
+</body></html>

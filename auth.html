@@ -1,0 +1,103 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Log in · REDCUT</title><link rel="stylesheet" href="assets/app.css">
+<style>
+  .split{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 60px)}
+  @media(max-width:880px){.split{grid-template-columns:1fr}.side{display:none}}
+  .side{border-right:1px solid var(--line);padding:60px 48px;background:
+    radial-gradient(70% 50% at 20% 20%,rgba(255,34,51,.14),transparent 70%),#0b0b0e;display:flex;flex-direction:column;justify-content:center}
+  .side li{list-style:none;padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+  .side li b{color:var(--red);font-family:ui-monospace,monospace;font-size:12px}
+  .form{padding:60px 42px;display:flex;flex-direction:column;justify-content:center;max-width:520px;margin:0 auto;width:100%}
+  .tabs{display:flex;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:var(--r);padding:4px;margin-bottom:26px}
+  .tabs button{flex:1;background:transparent;border:none;color:var(--mut);padding:8px;border-radius:4px;cursor:pointer;font:inherit}
+  .tabs button.on{background:var(--red);color:#fff;font-weight:600}
+  .oauth{display:grid;gap:8px;margin-bottom:20px}
+  .sep{display:flex;align-items:center;gap:12px;color:var(--mut);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin:20px 0}
+  .sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--line)}
+  .err{color:var(--red);font-size:12.5px;min-height:18px;margin:2px 0 10px}
+</style></head><body>
+
+<div class="split">
+  <aside class="side">
+    <a class="brand" href="index.html" style="margin-bottom:28px"><span class="dot"></span>RED<i>CUT</i></a>
+    <h2>Your projects, kept on your machine</h2>
+    <p class="mut" style="margin:14px 0 24px">An account groups your projects, remembers your workspace and keeps your export history. The media itself never leaves this device.</p>
+    <ul>
+      <li><b>01</b><div><b style="color:var(--txt)">Project library</b><p class="mut">Folders, tags, pins, trash and version history.</p></div></li>
+      <li><b>02</b><div><b style="color:var(--txt)">Workspace settings</b><p class="mut">Timeline fps, autosave interval, export defaults, keymap.</p></div></li>
+      <li><b>03</b><div><b style="color:var(--txt)">Export history</b><p class="mut">Every render you finish, with size and settings.</p></div></li>
+    </ul>
+  </aside>
+
+  <main class="form">
+    <div class="tabs" role="tablist">
+      <button id="tLogin" class="on">Log in</button>
+      <button id="tSignup">Create account</button>
+    </div>
+
+    <div class="oauth">
+      <button class="btn" data-oauth="Google">Continue with Google</button>
+      <button class="btn" data-oauth="GitHub">Continue with GitHub</button>
+      <button class="btn" data-oauth="email link">Email me a sign in link</button>
+    </div>
+    <div class="sep">or use a password</div>
+
+    <div id="fName" class="field" hidden><label class="f">Name</label><input id="name" type="text" placeholder="Your name" autocomplete="name"></div>
+    <div class="field"><label class="f">Email</label><input id="email" type="email" placeholder="you@studio.com" autocomplete="email"></div>
+    <div class="field"><label class="f">Password</label><input id="pass" type="password" placeholder="At least 6 characters" autocomplete="current-password"></div>
+    <div class="err" id="err"></div>
+    <button class="btn primary lg" id="go">Log in</button>
+    <div style="display:flex;justify-content:space-between;margin-top:14px">
+      <a class="hint" href="#" id="forgot">Forgot your password?</a>
+      <a class="hint" href="editor.html">Skip, just open the editor</a>
+    </div>
+    <button class="btn ghost" id="demo" style="margin-top:22px">Use the demo account</button>
+    <p class="hint" style="margin-top:16px">Accounts are stored in this browser only. Attach a real auth backend before putting this online.</p>
+  </main>
+</div>
+
+<script src="assets/store.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+let mode = location.hash==="#signup" ? "signup" : "login";
+const next = new URLSearchParams(location.search).get("next") || "dashboard.html";
+function paint(){
+  $("#tLogin").classList.toggle("on",mode==="login");
+  $("#tSignup").classList.toggle("on",mode==="signup");
+  $("#fName").hidden = mode!=="signup";
+  $("#go").textContent = mode==="signup" ? "Create account" : "Log in";
+  $("#pass").autocomplete = mode==="signup" ? "new-password" : "current-password";
+  $("#err").textContent="";
+  document.title = (mode==="signup"?"Create account":"Log in")+" · REDCUT";
+}
+$("#tLogin").onclick=()=>{mode="login";paint()};
+$("#tSignup").onclick=()=>{mode="signup";paint()};
+$("#go").onclick=async()=>{
+  $("#err").textContent="";
+  try{
+    if(mode==="signup") await RC.Auth.signup($("#name").value,$("#email").value,$("#pass").value);
+    else await RC.Auth.login($("#email").value,$("#pass").value);
+    location.href=next;
+  }catch(e){ $("#err").textContent=e.message; }
+};
+$("#demo").onclick=()=>{ RC.Auth.demo(); location.href=next; };
+$("#forgot").onclick=e=>{
+  e.preventDefault();
+  RC.modal(`<div class="mh"><b class="ttl">Reset password</b><button class="btn sm ghost" data-x>Close</button></div>
+  <div class="mb"><p class="mut">Enter the email on the account. With a backend attached this sends a one time reset link that expires in 30 minutes.</p>
+  <div class="field" style="margin-top:14px"><input id="re" type="email" placeholder="you@studio.com"></div>
+  <button class="btn primary" id="rgo">Send reset link</button><p class="hint" id="rmsg"></p></div>`);
+  document.querySelector("#rgo").onclick=()=>{
+    const ok=RC.Auth.reset(document.querySelector("#re").value);
+    document.querySelector("#rmsg").textContent = ok
+      ? "An account exists for that email. Connect an email service to deliver the link."
+      : "No account here uses that email.";
+  };
+};
+document.querySelectorAll("[data-oauth]").forEach(b=>b.onclick=()=>
+  RC.toast(b.dataset.oauth+" sign in needs an OAuth backend. Use a password or the demo account for now.",3200));
+addEventListener("keydown",e=>{ if(e.key==="Enter") $("#go").click(); });
+paint();
+if(RC.Auth.current()) location.href=next;
+</script></body></html>

@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Legal · REDCUT</title><link rel="stylesheet" href="assets/app.css">
+<style>
+  .shell{max-width:840px;margin:0 auto;padding:34px 22px}
+  h3{margin:34px 0 10px;scroll-margin-top:80px}
+  p,li{color:var(--mut)}p{margin-bottom:10px}
+  ul{margin:0 0 14px 18px}li{margin-bottom:6px}
+  .warn{border:1px solid #4a3f14;border-left:2px solid var(--warn);border-radius:var(--r);padding:14px 16px;margin:18px 0;background:#16150f;color:var(--txt)}
+</style></head><body>
+<div class="shell">
+  <p class="eyebrow">Legal</p>
+  <h2>Policies</h2>
+  <div class="warn">Template text, not legal advice. Have a lawyer review and adapt this before you publish it, especially the jurisdiction, retention periods and contact details.</div>
+
+  <h3 id="privacy">Privacy policy</h3>
+  <p>REDCUT processes your video, audio and image files entirely inside your browser. Media is never transmitted to a server. Project data, cached media and account details are stored in your browser's own storage on your device.</p>
+  <ul>
+    <li><b>What is collected in this build:</b> nothing leaves your device.</li>
+    <li><b>What a hosted version would collect:</b> account email, plan status, billing identifiers held by the payment provider, and error diagnostics.</li>
+    <li><b>Retention:</b> local data lasts until you clear site data or delete your account in settings.</li>
+    <li><b>Third parties:</b> none in this build. A hosted version would name its payment, email and hosting providers here.</li>
+  </ul>
+
+  <h3 id="terms">Terms of service</h3>
+  <p>Use of REDCUT is at your own risk. Because editing and export happen on your machine, you are responsible for keeping backups of your source footage and finished renders. Project files record edit decisions, not media, so losing your source files loses your ability to re-export.</p>
+  <ul>
+    <li>You keep all rights in the content you edit.</li>
+    <li>You are responsible for holding the rights to any footage, music or fonts you import.</li>
+    <li>The software is provided as is, without warranty of any kind.</li>
+    <li>Liability, where it can be limited by law, is limited to fees paid in the previous twelve months.</li>
+  </ul>
+
+  <h3 id="cookies">Cookie notice</h3>
+  <p>This build sets no cookies and runs no analytics or advertising scripts. It uses localStorage and IndexedDB, which are first party storage mechanisms needed for the app to work: your session, preferences, projects and cached media. There is nothing to opt out of because nothing is tracked.</p>
+
+  <h3 id="gdpr">GDPR and data rights</h3>
+  <p>Under the GDPR and comparable laws you have the right to access, correct, export and erase your personal data.</p>
+  <ul>
+    <li><b>Access and portability:</b> every project can be downloaded as a .redcut file from your dashboard.</li>
+    <li><b>Erasure:</b> Settings, Account, Delete my data removes your account, projects, cached media and export history from this device immediately.</li>
+    <li><b>Rectification:</b> name and email are editable in settings.</li>
+    <li><b>Data processor:</b> in this build there is none, since no data leaves your device.</li>
+  </ul>
+  <p>For a hosted deployment, name your data controller, the legal basis for processing, your DPO contact and your supervisory authority here.</p>
+
+  <h3 id="security">Security</h3>
+  <p>This build stores account passwords as SHA-256 hashes in browser storage, which is adequate for a local prototype and not adequate for production. Before hosting, move authentication server side with a slow password hash such as Argon2 or bcrypt, issue short lived tokens, add rate limiting, CSRF protection, a strict content security policy and server side validation of every upload.</p>
+</div>
+<script src="assets/store.js"></script>
+<script>RC.mountNav(""); RC.mountFooter();</script>
+</body></html>

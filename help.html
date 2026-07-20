@@ -1,0 +1,139 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Help center · REDCUT</title>
+<meta name="description" content="Documentation, keyboard shortcuts, troubleshooting, roadmap and support for the REDCUT browser video editor.">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  .shell{display:grid;grid-template-columns:210px 1fr;gap:36px;max-width:var(--max);margin:0 auto;padding:34px 22px}
+  @media(max-width:860px){.shell{grid-template-columns:1fr}.toc{display:none}}
+  .toc{position:sticky;top:80px;align-self:start}
+  .toc a{display:block;padding:6px 10px;border-radius:var(--r);color:var(--mut);font-size:13px}
+  .toc a:hover{background:var(--panel2);color:var(--txt)}
+  article h3{margin:34px 0 10px;scroll-margin-top:80px}
+  article h2{scroll-margin-top:80px;margin-bottom:6px}
+  article p{color:var(--mut);margin-bottom:10px;max-width:760px}
+  article ul{margin:0 0 14px 18px;color:var(--mut)}
+  article li{margin-bottom:6px}
+  .kbtable{display:grid;grid-template-columns:1fr 1fr;gap:2px 28px;margin:14px 0}
+  @media(max-width:700px){.kbtable{grid-template-columns:1fr}}
+  .kb{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-bottom:1px dashed #1c1c22;font-size:13px}
+  .kb span:first-child{color:var(--mut)}
+  .box{border:1px solid var(--line);border-left:2px solid var(--red);border-radius:var(--r);padding:14px 16px;margin:16px 0;background:var(--panel)}
+  .rd{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+  .rd .tag{flex:none;margin-top:2px}
+  .log{border-left:1px solid var(--line);padding-left:18px;margin-left:6px}
+  .log div{position:relative;padding-bottom:18px}
+  .log div::before{content:"";position:absolute;left:-23px;top:6px;width:9px;height:9px;background:var(--red);border-radius:50%}
+</style></head><body>
+
+<div class="shell">
+  <nav class="toc">
+    <h4 class="ttl mut" style="margin-bottom:8px">Contents</h4>
+    <a href="#start">Getting started</a><a href="#import">Importing media</a><a href="#edit">Editing</a>
+    <a href="#audio">Audio and titles</a><a href="#export">Exporting</a><a href="#shortcuts">Shortcuts</a>
+    <a href="#projects">Projects and saving</a><a href="#trouble">Troubleshooting</a>
+    <a href="#faq">FAQ</a><a href="#roadmap">Roadmap</a><a href="#changelog">Changelog</a><a href="#contact">Contact</a>
+  </nav>
+
+  <article>
+    <p class="eyebrow">Help center</p>
+    <h2 id="start">Getting started</h2>
+    <p>REDCUT runs entirely in your browser tab. There is nothing to install and nothing gets uploaded. Chrome or Edge give you the widest format support; Safari works but records exports as MP4 with fewer options; Firefox exports WebM.</p>
+    <ul><li>Open the editor and drop a video file anywhere on the page.</li>
+        <li>Drag it from the media panel onto track V1.</li>
+        <li>Press <span class="kbd">Space</span> to play, <span class="kbd">Ctrl+K</span> to split.</li>
+        <li>Press <span class="kbd">Ctrl+M</span> to export.</li></ul>
+
+    <h3 id="import">Importing media</h3>
+    <p>Supported formats are whatever your browser can decode. In practice that means MP4 and MOV with H.264, WebM, MP3, WAV, M4A, AAC, PNG, JPG and WebP. HEVC, ProRes and RAW formats generally will not decode in a browser; convert them first.</p>
+    <p>Imported files are cached in this browser's storage so projects reopen with media attached. Clearing site data clears the cache and your clips will ask to be relinked.</p>
+
+    <h3 id="edit">Editing</h3>
+    <ul>
+      <li><b>Move</b> a clip by dragging it. Drag vertically to change tracks.</li>
+      <li><b>Trim</b> by dragging either end of a clip.</li>
+      <li><b>Split</b> at the playhead with <span class="kbd">Ctrl+K</span> or <span class="kbd">Ctrl+B</span>.</li>
+      <li><b>Ripple delete</b> with <span class="kbd">Shift+Delete</span>, which closes the gap.</li>
+      <li><b>Snapping</b> toggles with <span class="kbd">S</span> and catches clip edges, the playhead and markers.</li>
+      <li><b>Markers</b> go down with <span class="kbd">M</span> for beats you want to cut to.</li>
+    </ul>
+    <div class="box">V2 sits above V1, so put titles and overlays on V2. A1 and A2 are audio only. Mute and solo per track live in the track headers.</div>
+
+    <h3 id="audio">Audio and titles</h3>
+    <p>Every clip has its own volume, speed, fade in and fade out in the inspector. The Audio tab generates royalty free effects on the spot: whooshes, risers, impacts, a lo-fi beat and an ambient pad. They are made with the Web Audio API and land in your media panel as WAV files.</p>
+    <p>The Titles tab adds a title card with a headline, subtitle, size and colour, and flat colour cards for intros and outros.</p>
+
+    <h3 id="export">Exporting</h3>
+    <p>Pick a resolution up to 4K, a frame rate and a bitrate. Export plays the timeline through once and records it, so a three minute cut takes three minutes. Keep the tab in the foreground; browsers throttle background tabs and you will get dropped frames.</p>
+    <p>File type depends on the browser. Chrome and Safari usually produce MP4; Firefox produces WebM, which every modern player and every social platform accepts.</p>
+
+    <h3 id="shortcuts">Keyboard shortcuts</h3>
+    <p>Premiere Pro and CapCut habits both work. Where the two conflict, both keys are bound.</p>
+    <div class="kbtable" id="keys"></div>
+
+    <h3 id="projects">Projects and saving</h3>
+    <p>The editor saves continuously: on a timer, after every edit, when the tab is hidden and when you close it. A version is kept each time you export or save manually, and you can restore any of the last fifteen from the project menu on your dashboard.</p>
+    <p><b>Save file</b> downloads a <span class="mono">.redcut</span> file containing your edit decisions. It does not contain the video itself, the same way a Premiere project file does not. Keep your source footage where it is and the project reopens fine.</p>
+
+    <h3 id="trouble">Troubleshooting</h3>
+    <ul>
+      <li><b>Clip shows a warning triangle.</b> Its source file is gone from the cache. Re-import the file with the same name.</li>
+      <li><b>Export is choppy.</b> Close other tabs, keep this one focused, and drop the bitrate a step.</li>
+      <li><b>No audio in the export.</b> Check the track is not muted and the clip volume is above zero, then export again.</li>
+      <li><b>A video imports with no picture.</b> The codec is not supported. Convert to H.264 MP4.</li>
+      <li><b>Playback stutters on 4K source.</b> Browsers decode 4K slowly. Proxy editing is on the roadmap.</li>
+    </ul>
+
+    <h3 id="faq">FAQ</h3>
+    <ul>
+      <li><b>Does anything upload?</b> No. Everything happens in your browser.</li>
+      <li><b>Is there a watermark?</b> No, on any plan.</li>
+      <li><b>Does it work offline?</b> Yes, once the page has loaded.</li>
+      <li><b>Can two people edit one project?</b> Not yet, that needs a sync backend.</li>
+      <li><b>Phone or tablet?</b> The site works, the editor asks for a desktop.</li>
+    </ul>
+
+    <h3 id="roadmap">Roadmap</h3>
+    <div class="rd"><span class="tag red">Next</span><div><b>WebCodecs export</b><p>Render faster than real time instead of recording the timeline live.</p></div></div>
+    <div class="rd"><span class="tag red">Next</span><div><b>Waveforms and thumbnails on clips</b><p>Read the audio peaks so you can cut to the picture of the sound.</p></div></div>
+    <div class="rd"><span class="tag soon">Planned</span><div><b>Transitions and keyframes</b><p>Cross dissolves, position and scale over time.</p></div></div>
+    <div class="rd"><span class="tag soon">Planned</span><div><b>Proxy editing</b><p>Cut against low resolution copies, export from the originals.</p></div></div>
+    <div class="rd"><span class="tag soon">Planned</span><div><b>Cloud sync and collaboration</b><p>Shared workspaces, review links and comments. Needs a backend.</p></div></div>
+    <div class="rd"><span class="tag soon">Planned</span><div><b>AI toolkit</b><p>Subtitles, silence removal, scene detection, auto reframe. Needs model hosting.</p></div></div>
+
+    <h3 id="changelog">Changelog</h3>
+    <div class="log">
+      <div><b>0.2</b><p>Accounts, dashboard with folders and trash, version history, cached media so projects reopen intact, title and colour cards, generated sound effects, export history, settings and admin views.</p></div>
+      <div><b>0.1</b><p>The editor: four track timeline, trimming, splitting, ripple delete, fades, speed, markers, snapping, undo, autosave, 1080p and 4K export, Premiere and CapCut shortcuts.</p></div>
+    </div>
+
+    <h3 id="contact">Contact and support</h3>
+    <p>Report a bug, request a feature or ask for help. With no backend attached, this form shows you the payload it would send.</p>
+    <div class="grid g2" style="max-width:700px">
+      <div class="field"><label class="f">Your email</label><input id="cE" type="email" placeholder="you@studio.com"></div>
+      <div class="field"><label class="f">Topic</label><select id="cT"><option>Bug report</option><option>Feature request</option><option>Billing</option><option>Something else</option></select></div>
+    </div>
+    <div class="field" style="max-width:700px"><label class="f">Message</label><textarea id="cM" rows="5" placeholder="What happened, and what did you expect?"></textarea></div>
+    <button class="btn primary" id="cGo">Send</button>
+    <p class="hint" id="cOut" style="margin-top:10px"></p>
+  </article>
+</div>
+
+<script src="assets/store.js"></script>
+<script>
+const KEYS=[["Play or pause","Space / K"],["Shuttle back or forward","J · L"],["Split at playhead","Ctrl+K · Ctrl+B"],
+ ["Trim in / out to playhead","I · O"],["Step one frame","← →"],["Step five frames","Shift+← →"],
+ ["Go to start / end","Home · End"],["Delete selection","Delete"],["Ripple delete","Shift+Delete"],
+ ["Undo / redo","Ctrl+Z · Ctrl+Shift+Z"],["Copy / paste / cut","Ctrl+C · V · X"],["Duplicate clip","Ctrl+D"],
+ ["Select all","Ctrl+A"],["Toggle snapping","S"],["Add marker","M"],["Zoom in / out","+ · −"],
+ ["Zoom to fit","\\"],["Save project file","Ctrl+S"],["Export","Ctrl+M · Ctrl+Shift+E"],["Import media","Ctrl+I"],["Shortcut list","?"]];
+document.querySelector("#keys").innerHTML=KEYS.map(k=>`<div class="kb"><span>${k[0]}</span><span class="kbd">${k[1]}</span></div>`).join("");
+document.querySelector("#cGo").onclick=()=>{
+  const p={email:document.querySelector("#cE").value,topic:document.querySelector("#cT").value,
+    message:document.querySelector("#cM").value,page:location.href,agent:navigator.userAgent.slice(0,60)};
+  if(!p.email||!p.message){ document.querySelector("#cOut").textContent="Add your email and a message first."; return; }
+  document.querySelector("#cOut").textContent="Would POST to /api/support: "+JSON.stringify(p);
+  RC.toast("No backend attached yet, payload shown below the form.",3000);
+};
+RC.mountNav("help.html"); RC.mountFooter();
+</script></body></html>

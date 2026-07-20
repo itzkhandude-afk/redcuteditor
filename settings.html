@@ -1,0 +1,153 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Settings · REDCUT</title><link rel="stylesheet" href="assets/app.css">
+<style>
+  .shell{display:grid;grid-template-columns:190px 1fr;gap:34px;max-width:960px;margin:0 auto;padding:34px 22px}
+  @media(max-width:800px){.shell{grid-template-columns:1fr}}
+  .tabs a{display:block;padding:8px 11px;border-radius:var(--r);color:var(--mut);font-size:13px;cursor:pointer}
+  .tabs a.on{background:var(--panel2);color:var(--txt);box-shadow:inset 2px 0 0 var(--red)}
+  .panel{display:none}.panel.on{display:block}
+  .r{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .r .l b{display:block;font-size:13.5px}
+  .r .l span{font-size:12px;color:var(--mut)}
+  .r .c{flex:none;width:200px}
+  .meter{height:6px;background:#1c1c22;border-radius:6px;overflow:hidden;margin:10px 0 6px}
+  .meter i{display:block;height:100%;background:var(--red)}
+  .danger{border:1px solid #3a1620;border-radius:var(--r);padding:16px;margin-top:20px}
+</style></head><body>
+
+<div class="shell">
+  <nav class="tabs">
+    <h4 class="ttl mut" style="margin-bottom:8px">Settings</h4>
+    <a class="on" data-p="acct">Account</a><a data-p="ws">Workspace</a><a data-p="editor">Editor</a>
+    <a data-p="export">Export defaults</a><a data-p="keys">Keyboard</a><a data-p="storage">Storage</a>
+    <a data-p="notif">Notifications</a><a data-p="plan">Plan and billing</a>
+  </nav>
+  <main>
+    <section class="panel on" id="p-acct">
+      <h2>Account</h2>
+      <div class="r"><div class="l"><b>Name</b><span>Shown on shared projects</span></div><div class="c"><input id="sName" type="text"></div></div>
+      <div class="r"><div class="l"><b>Email</b><span>Used to sign in</span></div><div class="c"><input id="sEmail" type="email"></div></div>
+      <div class="r"><div class="l"><b>Password</b><span>Change your sign in password</span></div><div class="c"><button class="btn" id="sPass">Change password</button></div></div>
+      <div class="r"><div class="l"><b>Two factor authentication</b><span>Requires a backend to issue and verify codes</span></div><div class="c"><button class="btn" disabled>Not available</button></div></div>
+      <div class="danger">
+        <b style="color:var(--red)">Delete everything on this device</b>
+        <p class="hint" style="margin:6px 0 12px">Removes your account, projects, cached media and export history from this browser. It cannot be undone.</p>
+        <button class="btn" id="wipe">Delete my data</button>
+      </div>
+    </section>
+
+    <section class="panel" id="p-ws">
+      <h2>Workspace</h2>
+      <div class="r"><div class="l"><b>Theme</b><span>Light theme is planned, the editor is built for dark</span></div>
+        <div class="c"><select id="theme"><option value="dark">Dark</option><option value="light">Light (soon)</option></select></div></div>
+      <div class="r"><div class="l"><b>Language</b><span>Interface language</span></div>
+        <div class="c"><select id="lang"><option value="en">English</option><option value="es">Español (soon)</option><option value="hi">हिन्दी (soon)</option><option value="fr">Français (soon)</option></select></div></div>
+      <div class="r"><div class="l"><b>Reset workspace layout</b><span>Restores default panel and timeline sizes</span></div>
+        <div class="c"><button class="btn" id="resetWs">Reset layout</button></div></div>
+    </section>
+
+    <section class="panel" id="p-editor">
+      <h2>Editor</h2>
+      <div class="r"><div class="l"><b>Autosave interval</b><span>How often work is written to storage</span></div>
+        <div class="c"><select id="autosave"><option value="3">Every 3 seconds</option><option value="5">Every 5 seconds</option><option value="15">Every 15 seconds</option><option value="30">Every 30 seconds</option></select></div></div>
+      <div class="r"><div class="l"><b>Timeline frame rate</b><span>Sets timecode and frame stepping</span></div>
+        <div class="c"><select id="fps"><option>24</option><option>25</option><option>30</option><option>50</option><option>60</option></select></div></div>
+      <div class="r"><div class="l"><b>Playback quality</b><span>Lower quality helps on heavy 4K source</span></div>
+        <div class="c"><select id="quality"><option value="auto">Auto</option><option value="full">Full</option><option value="half">Half</option><option value="quarter">Quarter</option></select></div></div>
+      <div class="r"><div class="l"><b>Proxy editing</b><span>Cut against light copies, export from originals. Needs a transcode service</span></div>
+        <div class="c"><button class="btn" disabled>Not available</button></div></div>
+      <div class="r"><div class="l"><b>GPU acceleration</b><span>Controlled by your browser, not by REDCUT</span></div>
+        <div class="c"><button class="btn" disabled>Browser managed</button></div></div>
+    </section>
+
+    <section class="panel" id="p-export">
+      <h2>Export defaults</h2>
+      <div class="r"><div class="l"><b>Default resolution</b><span>Preselected in the export dialog</span></div>
+        <div class="c"><select id="exportRes"><option value="1920x1080">1080p · 1920×1080</option><option value="3840x2160">4K · 3840×2160</option><option value="1080x1920">Reel · 1080×1920</option><option value="1080x1080">Square · 1080×1080</option></select></div></div>
+      <div class="r"><div class="l"><b>Notify when a render finishes</b><span>Browser notification when export completes</span></div>
+        <div class="c"><select id="notifyExport"><option value="true">On</option><option value="false">Off</option></select></div></div>
+      <div class="r"><div class="l"><b>Background export</b><span>Rendering off the main tab needs a server side encoder</span></div>
+        <div class="c"><button class="btn" disabled>Not available</button></div></div>
+    </section>
+
+    <section class="panel" id="p-keys">
+      <h2>Keyboard</h2>
+      <p class="mut">Premiere Pro and CapCut bindings are both active by default. Custom remapping is on the roadmap.</p>
+      <div class="r"><div class="l"><b>Keymap preset</b><span>Which shortcut scheme takes priority</span></div>
+        <div class="c"><select id="keymap"><option>Premiere + CapCut</option><option>Premiere only (soon)</option><option>Final Cut (soon)</option><option>Custom (soon)</option></select></div></div>
+      <p style="margin-top:14px"><a class="btn ghost" href="help.html#shortcuts">See the full shortcut list</a></p>
+    </section>
+
+    <section class="panel" id="p-storage">
+      <h2>Storage</h2>
+      <div class="meter"><i id="mBar"></i></div>
+      <p class="hint mono" id="mTxt">Calculating…</p>
+      <p class="mut" style="margin-top:10px">Cached media lives in this browser. Removing a file frees the space but any clip that used it will ask to be relinked.</p>
+      <div id="mediaList" style="margin-top:14px"></div>
+    </section>
+
+    <section class="panel" id="p-notif">
+      <h2>Notifications</h2>
+      <p class="mut">Email notifications need a mail service. These toggles are stored locally and read by the app once you attach one.</p>
+      <div class="r"><div class="l"><b>Render finished</b></div><div class="c"><select data-n="render"><option>On</option><option>Off</option></select></div></div>
+      <div class="r"><div class="l"><b>Storage nearly full</b></div><div class="c"><select data-n="storage"><option>On</option><option>Off</option></select></div></div>
+      <div class="r"><div class="l"><b>Comments on shared projects</b></div><div class="c"><select data-n="comment"><option>On</option><option>Off</option></select></div></div>
+      <div class="r"><div class="l"><b>Product updates</b></div><div class="c"><select data-n="news"><option>Off</option><option>On</option></select></div></div>
+    </section>
+
+    <section class="panel" id="p-plan">
+      <h2>Plan and billing</h2>
+      <div class="r"><div class="l"><b>Current plan</b><span id="planNote"></span></div><div class="c"><a class="btn primary" href="pricing.html">Compare plans</a></div></div>
+      <div class="r"><div class="l"><b>AI credits</b><span>Used by the AI panel once models are connected</span></div><div class="c mono" id="credits"></div></div>
+      <div class="r"><div class="l"><b>Invoices</b><span>Issued by your payment provider</span></div><div class="c"><button class="btn" disabled>None yet</button></div></div>
+      <div class="r"><div class="l"><b>Promo code</b><span>Redemption needs the billing backend</span></div><div class="c"><input type="text" placeholder="Enter a code"></div></div>
+    </section>
+  </main>
+</div>
+
+<script src="assets/store.js"></script>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const user=RC.Auth.require();
+$$(".tabs a").forEach(a=>a.onclick=()=>{
+  $$(".tabs a").forEach(x=>x.classList.remove("on")); a.classList.add("on");
+  $$(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+a.dataset.p));
+});
+$("#sName").value=user.name; $("#sEmail").value=user.email;
+$("#planNote").textContent="You are on the "+user.plan+" plan";
+$("#credits").textContent=user.aiCredits+" credits";
+const P=user.prefs;
+["theme","lang","autosave","fps","quality","exportRes","notifyExport"].forEach(k=>{
+  const el=$("#"+k); if(!el)return; el.value=String(P[k]);
+  el.onchange=()=>{ const v=el.value; P[k]= v==="true"?true : v==="false"?false : (isNaN(v)||k==="exportRes"?v:+v);
+    RC.Auth.save(user); RC.toast("Saved"); };
+});
+$("#sName").onchange=()=>{ user.name=$("#sName").value; user.avatar=user.name.trim().slice(0,1).toUpperCase(); RC.Auth.save(user); RC.toast("Saved"); };
+$("#sEmail").onchange=()=>{ user.email=$("#sEmail").value.trim().toLowerCase(); RC.Auth.save(user); RC.toast("Saved"); };
+$("#sPass").onclick=()=>RC.toast("Password changes need the auth backend. See README.",3000);
+$("#resetWs").onclick=()=>{ RC.LS.del("redcut:layout"); RC.toast("Layout reset"); };
+$$("[data-n]").forEach(s=>{ const k="redcut:notif:"+s.dataset.n; s.value=RC.LS.get(k,s.value);
+  s.onchange=()=>{ RC.LS.set(k,s.value); RC.toast("Saved"); }; });
+$("#wipe").onclick=async()=>{
+  if(!confirm("Delete your account, projects and cached media from this browser?")) return;
+  const ps=await RC.Projects.list(user.id); for(const p of ps) await RC.Projects.remove(p.id);
+  const ms=await RC.Media.list(user.id); for(const m of ms) await RC.Media.remove(m.id);
+  const es=await RC.Exports.list(user.id); for(const e of es) await RC.Exports.remove(e.id);
+  RC.LS.set("redcut:users", RC.Auth.users().filter(u=>u.id!==user.id));
+  RC.Auth.logout(); location.href="index.html";
+};
+(async()=>{
+  const used=await RC.Projects.usage(user.id);
+  $("#mBar").style.width=Math.min(100,used/user.quotaBytes*100)+"%";
+  $("#mTxt").textContent=RC.fmtBytes(used)+" of "+RC.fmtBytes(user.quotaBytes)+" used";
+  const list=await RC.Media.list(user.id);
+  $("#mediaList").innerHTML = list.length ? list.map(m=>`<div class="r" style="padding:9px 0">
+      <div class="l"><b>${m.name}</b><span>${m.kind} · ${RC.fmtBytes(m.size)}</span></div>
+      <div class="c" style="width:auto"><button class="btn sm" data-rm="${m.id}">Remove</button></div></div>`).join("")
+    : `<p class="hint">No cached media yet.</p>`;
+  $("#mediaList").onclick=async e=>{ const id=e.target.dataset.rm; if(!id)return;
+    await RC.Media.remove(id); RC.toast("Removed"); location.reload(); };
+})();
+RC.mountNav("settings.html"); RC.mountFooter();
+</script></body></html>

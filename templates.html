@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Templates · REDCUT</title>
+<meta name="description" content="Start a reel, short, promo or podcast clip from a preset timeline sized for the platform.">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 26px}
+  .filters button{border:1px solid var(--line);background:transparent;color:var(--mut);border-radius:99px;padding:6px 14px;font:inherit;font-size:12.5px;cursor:pointer}
+  .filters button.on{background:var(--red);border-color:var(--red);color:#fff}
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+  .t{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);cursor:pointer;transition:.15s}
+  .t:hover{border-color:var(--red-dim);transform:translateY(-2px)}
+  .t .ar{background:linear-gradient(150deg,#2a1218,#101015);display:grid;place-items:center;color:#3a3a46;font-size:12px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+  .t .m{padding:12px}
+  .t .m b{font-size:13.5px}
+  .t .m .s{font-size:11.5px;color:var(--mut);display:flex;justify-content:space-between;margin-top:5px}
+</style></head><body>
+<section style="border-top:none;padding-bottom:20px"><div class="wrap">
+  <p class="eyebrow">Templates</p>
+  <h2>Start from a shape that fits the platform</h2>
+  <p class="mut" style="max-width:640px;margin-top:10px">Each template opens a project already sized and framed for where it is going. Swap in your own footage and cut. Nothing is locked, they are ordinary projects.</p>
+  <div class="filters" id="filters"></div>
+  <div class="cards" id="cards"></div>
+  <p class="hint" style="margin-top:20px">Templates set canvas size and starting structure. Animated presets with motion graphics need a rendering layer, tracked on the roadmap.</p>
+</div></section>
+<script src="assets/store.js"></script>
+<script>
+const T=[
+ {n:"Instagram reel",c:"Social",r:"1080x1920",a:"9/16",d:"Vertical, hook in the first second"},
+ {n:"YouTube short",c:"Social",r:"1080x1920",a:"9/16",d:"Vertical with room for captions"},
+ {n:"TikTok cut",c:"Social",r:"1080x1920",a:"9/16",d:"Fast pacing, jump cut friendly"},
+ {n:"YouTube video",c:"Long form",r:"1920x1080",a:"16/9",d:"Standard landscape upload"},
+ {n:"Podcast clip",c:"Long form",r:"1080x1080",a:"1/1",d:"Square, caption safe area"},
+ {n:"Talking head",c:"Long form",r:"1920x1080",a:"16/9",d:"Single camera with B roll track"},
+ {n:"Product promo",c:"Business",r:"1920x1080",a:"16/9",d:"Feature beats with title cards"},
+ {n:"Real estate tour",c:"Business",r:"1920x1080",a:"16/9",d:"Room by room with music bed"},
+ {n:"Corporate update",c:"Business",r:"1920x1080",a:"16/9",d:"Lower thirds and outro card"},
+ {n:"Wedding highlight",c:"Story",r:"1920x1080",a:"16/9",d:"Slow build, long fades"},
+ {n:"Travel montage",c:"Story",r:"1920x1080",a:"16/9",d:"Beat matched cuts"},
+ {n:"Gaming recap",c:"Story",r:"1920x1080",a:"16/9",d:"Highlights with impact stings"}
+];
+const cats=["All",...new Set(T.map(t=>t.c))];
+let cat="All";
+document.querySelector("#filters").innerHTML=cats.map(c=>`<button data-c="${c}" class="${c===cat?"on":""}">${c}</button>`).join("");
+document.querySelector("#filters").onclick=e=>{ const b=e.target.closest("[data-c]"); if(!b)return;
+  cat=b.dataset.c; document.querySelectorAll("#filters button").forEach(x=>x.classList.toggle("on",x===b)); paint(); };
+function paint(){
+  document.querySelector("#cards").innerHTML=T.filter(t=>cat==="All"||t.c===cat).map(t=>`
+    <article class="t" data-n="${t.n}" data-r="${t.r}">
+      <div class="ar" style="aspect-ratio:${t.a}">${t.a}</div>
+      <div class="m"><b>${t.n}</b><div class="mut" style="font-size:12px;margin-top:4px">${t.d}</div>
+      <div class="s mono"><span>${t.r.replace("x","×")}</span><span class="tag red">Use</span></div></div>
+    </article>`).join("");
+}
+document.querySelector("#cards").onclick=async e=>{
+  const c=e.target.closest("[data-n]"); if(!c)return;
+  const u=RC.Auth.current();
+  if(!u){ location.href="auth.html?next="+encodeURIComponent("templates.html"); return; }
+  const p=await RC.Projects.create(u,{name:c.dataset.n,doc:{fps:30,zoom:60,playhead:0,markers:[],media:[],clips:[],res:c.dataset.r}});
+  location.href="editor.html?p="+p.id;
+};
+paint(); RC.mountNav("templates.html"); RC.mountFooter();
+</script></body></html>

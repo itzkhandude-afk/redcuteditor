@@ -1,0 +1,111 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pricing · REDCUT</title>
+<meta name="description" content="Free browser editing with 4K export. Paid tiers add cloud sync, AI tools and team workspaces.">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+  .toggle{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:4px;margin-top:18px}
+  .toggle button{border:none;background:none;color:var(--mut);padding:7px 16px;border-radius:99px;cursor:pointer;font:inherit;font-size:12.5px}
+  .toggle button.on{background:var(--red);color:#fff}
+  .plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px}
+  @media(max-width:1000px){.plans{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.plans{grid-template-columns:1fr}}
+  .plan{border:1px solid var(--line);border-radius:10px;padding:22px;background:var(--panel);display:flex;flex-direction:column}
+  .plan.best{border-color:var(--red);box-shadow:0 0 0 1px var(--red-dim),0 20px 50px rgba(255,34,51,.07);position:relative}
+  .plan.best::before{content:"Most popular";position:absolute;top:-10px;left:22px;background:var(--red);color:#fff;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px;border-radius:99px}
+  .price{font-size:34px;font-weight:800;letter-spacing:-.03em;margin:12px 0 2px}
+  .price span{font-size:13px;color:var(--mut);font-weight:400}
+  .plan ul{margin:16px 0;flex:1}
+  .plan li{list-style:none;font-size:13px;padding:5px 0;color:var(--mut);display:flex;gap:8px}
+  .plan li::before{content:"✓";color:var(--red)}
+  .plan li.no::before{content:"–";color:#3a3a44}
+  table.full{width:100%;border-collapse:collapse;margin-top:26px}
+  table.full th,table.full td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}
+  table.full th{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  table.full td:first-child{color:var(--mut)}
+  details{border-bottom:1px solid var(--line);padding:15px 0}
+  details summary{cursor:pointer;font-weight:600;list-style:none}
+  details summary::-webkit-details-marker{display:none}
+  details p{color:var(--mut);margin-top:9px;max-width:760px}
+</style></head><body>
+
+<section style="border-top:none"><div class="wrap center">
+  <p class="eyebrow">Pricing</p>
+  <h2>The editor is free. Always.</h2>
+  <p class="mut" style="max-width:600px;margin:12px auto 0">Cutting and exporting at 4K costs nothing, because it runs on your machine. Paid tiers pay for the things that need servers: sync, AI and teams.</p>
+  <div class="toggle" id="cycle"><button class="on" data-c="m">Monthly</button><button data-c="y">Yearly · save 20%</button></div>
+
+  <div class="plans" style="text-align:left">
+    <div class="plan">
+      <b class="ttl">Free</b><div class="price" data-m="0" data-y="0">$0<span> forever</span></div>
+      <p class="hint">Everything that runs locally.</p>
+      <ul><li>Full timeline editor</li><li>4K export, no watermark</li><li>Local project storage</li><li>Sound effect generator</li><li>All keyboard shortcuts</li>
+          <li class="no">Cloud sync</li><li class="no">AI tools</li></ul>
+      <a class="btn" href="editor.html">Start editing</a>
+    </div>
+    <div class="plan best">
+      <b class="ttl">Pro</b><div class="price" data-m="12" data-y="9">$12<span>/mo</span></div>
+      <p class="hint">For people who ship weekly.</p>
+      <ul><li>Everything in Free</li><li>100 GB cloud projects</li><li>Sync across devices</li><li>Version history, 90 days</li><li>500 AI credits monthly</li><li>Priority export queue</li><li>Stock library access</li></ul>
+      <button class="btn primary" data-buy="Pro">Upgrade to Pro</button>
+    </div>
+    <div class="plan">
+      <b class="ttl">Business</b><div class="price" data-m="29" data-y="23">$29<span>/seat/mo</span></div>
+      <p class="hint">For teams cutting together.</p>
+      <ul><li>Everything in Pro</li><li>Shared workspace</li><li>Review links and comments</li><li>Brand kit, fonts and logos</li><li>1 TB team storage</li><li>Roles and permissions</li><li>Invoices and PO billing</li></ul>
+      <button class="btn" data-buy="Business">Start team trial</button>
+    </div>
+    <div class="plan">
+      <b class="ttl">Enterprise</b><div class="price">Talk<span> to us</span></div>
+      <p class="hint">For regulated and large orgs.</p>
+      <ul><li>Everything in Business</li><li>SSO and SCIM</li><li>Self hosted option</li><li>Audit logs</li><li>Custom retention</li><li>Named support</li><li>Security review</li></ul>
+      <a class="btn" href="help.html#contact">Contact sales</a>
+    </div>
+  </div>
+  <p class="hint" style="margin-top:16px">Prices are illustrative. Connect a payment provider before charging anyone.</p>
+</div></section>
+
+<section><div class="wrap">
+  <p class="eyebrow">Detail</p>
+  <h2>What each tier includes</h2>
+  <table class="full">
+    <thead><tr><th></th><th>Free</th><th>Pro</th><th>Business</th><th>Enterprise</th></tr></thead>
+    <tbody>
+      <tr><td>Export resolution</td><td>4K</td><td>4K</td><td>4K</td><td>4K</td></tr>
+      <tr><td>Watermark</td><td>None</td><td>None</td><td>None</td><td>None</td></tr>
+      <tr><td>Cloud storage</td><td>Local only</td><td>100 GB</td><td>1 TB shared</td><td>Custom</td></tr>
+      <tr><td>Version history</td><td>Last 15 saves</td><td>90 days</td><td>1 year</td><td>Custom</td></tr>
+      <tr><td>AI credits</td><td>—</td><td>500/mo</td><td>2000/seat</td><td>Custom</td></tr>
+      <tr><td>Collaborators</td><td>—</td><td>Review links</td><td>Unlimited seats</td><td>Unlimited</td></tr>
+      <tr><td>Support</td><td>Community</td><td>Email, 48 hr</td><td>Priority, 8 hr</td><td>Named contact</td></tr>
+    </tbody>
+  </table>
+</div></section>
+
+<section id="affiliate"><div class="wrap" style="max-width:900px">
+  <p class="eyebrow">Billing questions</p>
+  <h2>Before you pay anyone</h2>
+  <div style="margin-top:20px">
+    <details open><summary>Do I need a paid plan to export 4K?</summary><p>No. Export runs on your own hardware, so it stays free at every resolution with no watermark.</p></details>
+    <details><summary>What happens to my projects if I downgrade?</summary><p>They stay editable. Cloud copies beyond the free allowance become read only until you free up space or upgrade again.</p></details>
+    <details><summary>Can I cancel any time?</summary><p>Yes, and the plan runs to the end of the period you paid for.</p></details>
+    <details><summary>Do you have an affiliate programme?</summary><p>Planned at 25% recurring for twelve months. The dashboard for it is on the roadmap.</p></details>
+    <details><summary>Student and non profit pricing?</summary><p>50% off Pro on request with proof of status.</p></details>
+  </div>
+</div></section>
+
+<script src="assets/store.js"></script>
+<script>
+document.querySelector("#cycle").onclick=e=>{
+  const b=e.target.closest("[data-c]"); if(!b)return;
+  document.querySelectorAll("#cycle button").forEach(x=>x.classList.toggle("on",x===b));
+  const y=b.dataset.c==="y";
+  document.querySelectorAll(".price[data-m]").forEach(p=>{
+    const v=y?p.dataset.y:p.dataset.m;
+    p.innerHTML = "$"+v+"<span>"+(v==="0"?" forever":"/mo"+(y?", billed yearly":""))+"</span>";
+  });
+};
+document.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>
+  RC.toast("Checkout needs a payment provider. Wire Stripe to this button, see README.",3200));
+RC.mountNav("pricing.html"); RC.mountFooter();
+</script></body></html>
